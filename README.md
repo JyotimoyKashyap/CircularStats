@@ -1,6 +1,27 @@
 # CircularStats
 This is a custom widget made with Jetpack Compose for displaying stats of different things such as progress or measurement. 
 
+## How to add to your project
+Add maven repository url to your project if not included 
+
+1. Go to settings.gradle and add the following line
+```
+  allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+  
+```
+
+2. Add the following line to your build.gradle(:app) 'app level'
+```
+dependencies {
+	        implementation 'com.github.JyotimoyKashyap:CircularStats:0.0.1'
+	}
+```
+
 
 ## LICENSE
 
