@@ -64,5 +64,5 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
 
-    implementation 'com.github.JyotimoyKashyap:CircularStats:0.0.1'
+    implementation project(':CircularStatsWidget')
 }

@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     CircularStats(
                         canvasSize = 200.dp,
-                        indicatorValue = 50
+                        indicatorValue = 100
                     )
                 }
             }

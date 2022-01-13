@@ -1,9 +1,11 @@
 package com.jyotimoykashyap.circularstatswidget
 
+import android.os.Handler
+import android.os.Looper
+import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -29,6 +32,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
+
 
 @Composable
 fun CircularStats(
@@ -71,10 +75,53 @@ fun CircularStats(
     val percentage =
         (animateIndicatorValue / maxIndicatorValue) * 100
 
+
+    /**
+     * Assigning a state the size of the circular stat
+     * so that I can animate it from one state to another
+     * when I receive a maximum value of the indicator
+     * for that I need to store the state in the circular state
+     * variable
+     */
+
+    var circularStatState by remember {
+        mutableStateOf(StatsState.NORMAL)
+    }
+
+    val scaleAnimation by animateDpAsState(
+        if(circularStatState == StatsState.SCALED_UP)
+             canvasSize + 25.dp
+        else canvasSize,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioHighBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
+
+
     // calculate sweep angle
     val sweepAngle by animateFloatAsState(
         targetValue = (3.6*percentage).toFloat(),
-        animationSpec = tween(1000)
+        animationSpec = tween(1000),
+        finishedListener = {
+            // start another animation here
+            if(indicatorValue == maxIndicatorValue){
+
+                /**
+                 * When indicator value is equal to max value
+                 * then we need to make it scaled up
+                 */
+                circularStatState = StatsState.SCALED_UP
+
+                /**
+                 * And then after 300ms we need make it of normal size
+                 * again
+                 */
+                Handler(Looper.getMainLooper()).postDelayed({
+                    circularStatState = StatsState.NORMAL
+                }, 300)
+            }
+        }
     )
 
     // calculate the progress
@@ -98,7 +145,7 @@ fun CircularStats(
 
     Column(
         modifier = Modifier
-            .size(canvasSize)
+            .size(scaleAnimation)
             .drawBehind {
                 val componentSize = size / 1.25f
 
@@ -203,6 +250,20 @@ fun EmbeddedElements(
         fontSize = labelTextFontSize,
         color = labelTextColor
     )
+}
+
+/**
+ * An enum class for the state of the widget
+ *
+ * SCALED_UP -> This state represent the scaled up version of it
+ * NORMAL -> Normal state is the state for the widget to be normal size
+ *
+ * This states are necessary for animating the component
+ * from one state to another when we receive the desired condition
+ * to be true
+ */
+enum class StatsState{
+    SCALED_UP, NORMAL
 }
 
 @Composable
