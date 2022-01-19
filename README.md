@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/JyotimoyKashyap/CircularStats.svg)](https://jitpack.io/#JyotimoyKashyap/CircularStats)
+[![Release](https://jitpack.io/v/JyotimoyKashyap/CircularStats.svg)](https://jitpack.io/#JyotimoyKashyap/CircularStats)  [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 # CircularStats
 This is a custom widget made with Jetpack Compose for displaying stats of different things such as progress or measurement. 
