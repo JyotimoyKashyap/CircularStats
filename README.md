@@ -1,5 +1,4 @@
-[![Release](https://jitpack.io/v/User/Repo.svg)]
-(https://jitpack.io/#JyotimoyKashyap/CircularStats)
+[![Release](https://jitpack.io/v/JyotimoyKashyap/CircularStats.svg)](https://jitpack.io/#JyotimoyKashyap/CircularStats)
 
 # CircularStats
 This is a custom widget made with Jetpack Compose for displaying stats of different things such as progress or measurement. 
