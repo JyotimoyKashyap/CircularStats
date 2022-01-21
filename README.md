@@ -20,9 +20,12 @@ Add maven repository url to your project if not included
 2. Add the following line to your build.gradle(:app) 'app level'
 ```
 dependencies {
-	        implementation 'com.github.JyotimoyKashyap:CircularStats:0.0.1'
-	}
+	implementation 'com.github.JyotimoyKashyap:CircularStats:0.0.1'
+}
 ```
+
+## Preview
+![](./assets-readme/circular-stats-preview.gif)
 
 
 ## LICENSE
