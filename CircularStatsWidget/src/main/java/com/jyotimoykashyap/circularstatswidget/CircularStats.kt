@@ -33,9 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 
-/**
- * Dev Branch - Free to experiment
- */
+
 
 @Composable
 fun CircularStats(
