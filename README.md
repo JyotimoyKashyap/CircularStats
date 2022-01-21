@@ -4,6 +4,7 @@
 This is a custom widget made with Jetpack Compose for displaying stats of different things such as progress or measurement. 
 
 ## How to add to your project
+---
 Add maven repository url to your project if not included 
 
 1. Go to settings.gradle and add the following line
@@ -27,9 +28,25 @@ dependencies {
 ## Preview
 ![](./assets-readme/circular-stats-preview.gif)
 
+## How to use ?
+---
+After adding the dependencies in your project simply call `CircularStats()`
+
+### Basic Usage
+```
+CircularStats(
+              canvasSize = 200.dp,
+              indicatorValue = 100,
+              progressTextColor = MaterialTheme.colors.onBackground
+  )
+
+```
+
+Adding `canvasSize` and `indicatorValue` is mandatory but other parameters have default values which should work with your current theme. You can 
+
 
 ## LICENSE
-
+---
 
  Copyright 2022 Jyotimoy Kashyap
 
