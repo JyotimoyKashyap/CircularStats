@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +28,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     CircularStats(
                         canvasSize = 200.dp,
-                        indicatorValue = 100
+                        indicatorValue = 100,
+                        progressTextColor = MaterialTheme.colors.onBackground
                     )
                 }
             }

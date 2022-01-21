@@ -51,7 +51,7 @@ fun CircularStats(
     labelTextFontSize: TextUnit = 12.sp,
     labelTextColor: Color = MaterialTheme.colors.onSurface.copy(0.3f),
     progressTextFontSize: TextUnit = MaterialTheme.typography.h3.fontSize,
-    progressTextColor: Color = MaterialTheme.colors.onSecondary
+    progressTextColor: Color = MaterialTheme.colors.onSurface
 ){
 
 
