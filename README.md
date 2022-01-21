@@ -4,7 +4,6 @@
 This is a custom widget made with Jetpack Compose for displaying stats of different things such as progress or measurement. 
 
 ## How to add to your project
----
 Add maven repository url to your project if not included 
 
 1. Go to settings.gradle and add the following line
@@ -46,7 +45,7 @@ Adding `canvasSize` and `indicatorValue` is mandatory but other parameters have 
 
 
 ## LICENSE
----
+
 
  Copyright 2022 Jyotimoy Kashyap
 
