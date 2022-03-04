@@ -38,7 +38,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 @Composable
 fun CircularStats(
     canvasSize: Dp = 300.dp,
-    indicatorValue: Int = 0,
+    indicatorValue: Int = 10,
     maxIndicatorValue: Int = 100,
     backgroundIndicatorColor: Color = MaterialTheme.colors
         .onSurface.copy(alpha = 0.1f),
@@ -49,7 +49,8 @@ fun CircularStats(
     labelTextFontSize: TextUnit = 12.sp,
     labelTextColor: Color = MaterialTheme.colors.onSurface.copy(0.3f),
     progressTextFontSize: TextUnit = MaterialTheme.typography.h3.fontSize,
-    progressTextColor: Color = MaterialTheme.colors.onSurface
+    progressTextColor: Color = MaterialTheme.colors.onSurface,
+    animationType: AnimateCompletion = AnimateCompletion.BOUNCE
 ){
 
 
@@ -183,50 +184,6 @@ fun CircularStats(
 
 }
 
-fun DrawScope.foregroundProgress(
-    sweepAngle: Float,
-    componentSize: Size,
-    indicatorColor: Color,
-    indicatorStrokeWidth: Float
-){
-    drawArc(
-        size = componentSize,
-        color = indicatorColor,
-        startAngle = -90f,
-        sweepAngle = sweepAngle,
-        useCenter = false,
-        style = Stroke(
-            width = indicatorStrokeWidth,
-            cap = StrokeCap.Round
-        ),
-        topLeft = Offset(
-            x = (size.width - componentSize.width) / 2f,
-            y = (size.height - componentSize.height) / 2f
-        )
-    )
-}
-
-fun DrawScope.backgroundArc(
-    componentSize: Size,
-    indicatorColor: Color,
-    indicatorStrokeWidth: Float
-){
-    drawArc(
-        size = componentSize,
-        color = indicatorColor,
-        startAngle = -90f,
-        sweepAngle = 360f,
-        useCenter = false,
-        style = Stroke(
-            width = indicatorStrokeWidth,
-            cap = StrokeCap.Round
-        ),
-        topLeft = Offset(
-            x = (size.width - componentSize.width) / 2f,
-            y = (size.height - componentSize.height) / 2f
-        )
-    )
-}
 
 @Composable
 fun EmbeddedElements(
@@ -253,19 +210,8 @@ fun EmbeddedElements(
     )
 }
 
-/**
- * An enum class for the state of the widget
- *
- * SCALED_UP -> This state represent the scaled up version of it
- * NORMAL -> Normal state is the state for the widget to be normal size
- *
- * This states are necessary for animating the component
- * from one state to another when we receive the desired condition
- * to be true
- */
-enum class StatsState{
-    SCALED_UP, NORMAL
-}
+
+
 
 @Composable
 @Preview(showBackground = true)
