@@ -6,12 +6,12 @@ import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
@@ -25,12 +25,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 
 
@@ -38,7 +36,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 @Composable
 fun CircularStats(
     canvasSize: Dp = 300.dp,
-    indicatorValue: Int = 10,
+    indicatorValue: Int = 100,
     maxIndicatorValue: Int = 100,
     backgroundIndicatorColor: Color = MaterialTheme.colors
         .onSurface.copy(alpha = 0.1f),
@@ -90,16 +88,6 @@ fun CircularStats(
         mutableStateOf(StatsState.NORMAL)
     }
 
-    val scaleAnimation by animateDpAsState(
-        if(circularStatState == StatsState.SCALED_UP)
-             canvasSize + 25.dp
-        else canvasSize,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioHighBouncy,
-            stiffness = Spring.StiffnessLow
-        )
-    )
-
 
     // calculate sweep angle
     val sweepAngle by animateFloatAsState(
@@ -147,7 +135,9 @@ fun CircularStats(
 
     Column(
         modifier = Modifier
-            .size(scaleAnimation)
+            .size(
+                scaleAnimate(circularStatState = circularStatState, canvasSize = canvasSize)
+            )
             .drawBehind {
                 val componentSize = size / 1.25f
 
@@ -176,7 +166,12 @@ fun CircularStats(
             labelTextColor = labelTextColor,
             progressText = receivedValue,
             progressTextFontSize = progressTextFontSize,
-            progressTextColor = animateProgressTextColor
+            progressTextColor = animateProgressTextColor,
+            canvasSize = scaleAnimate(
+                circularStatState = circularStatState,
+                canvasSize = canvasSize
+            ),
+            maxIndicatorValue = maxIndicatorValue
         )
 
     }
@@ -192,22 +187,45 @@ fun EmbeddedElements(
     labelTextColor: Color,
     progressText: Int,
     progressTextFontSize: TextUnit,
-    progressTextColor: Color
+    progressTextColor: Color,
+    canvasSize: Dp,
+    maxIndicatorValue: Int
 ){
 
+    Box(
+        modifier = Modifier.size(canvasSize),
+        contentAlignment = Alignment.Center
+    ){
+        if(progressText != maxIndicatorValue){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(
+                    text = progressText.toString(),
+                    fontSize = progressTextFontSize,
+                    color = progressTextColor,
+                    fontWeight = FontWeight.Bold
+                )
 
-    Text(
-        text = progressText.toString(),
-        fontSize = progressTextFontSize,
-        color = progressTextColor,
-        fontWeight = FontWeight.Bold
-    )
+                Text(
+                    text = labelText,
+                    fontSize = labelTextFontSize,
+                    color = labelTextColor
+                )
+            }
+        }else{
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = "Checked",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
-    Text(
-        text = labelText,
-        fontSize = labelTextFontSize,
-        color = labelTextColor
-    )
+    }
+
+
+
+
 }
 
 
