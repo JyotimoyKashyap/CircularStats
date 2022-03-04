@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jyotimoykashyap.circularstats.ui.theme.CircularStatsTheme
+import com.jyotimoykashyap.circularstatswidget.AnimateCompletion
 import com.jyotimoykashyap.circularstatswidget.CircularStats
 
 
@@ -45,7 +46,8 @@ fun MainView(){
         CircularStats(
             canvasSize = 200.dp,
             indicatorValue = textState,
-            progressTextColor = MaterialTheme.colors.onBackground
+            progressTextColor = MaterialTheme.colors.onBackground,
+            animationType = AnimateCompletion.CHECKMARK
         )
 
         Spacer(modifier = Modifier

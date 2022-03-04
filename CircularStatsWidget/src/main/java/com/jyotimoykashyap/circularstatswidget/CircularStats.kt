@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
+import kotlinx.coroutines.delay
 
 @Composable
 fun CircularStats(
@@ -155,11 +156,16 @@ fun CircularStats(
             progressText = receivedValue,
             progressTextFontSize = progressTextFontSize,
             progressTextColor = animateProgressTextColor,
-            canvasSize = scaleAnimate(
-                circularStatState = circularStatState,
-                canvasSize = canvasSize
-            ),
-            maxIndicatorValue = maxIndicatorValue
+            canvasSize = if (animationType == AnimateCompletion.BOUNCE) {
+                canvasSize
+            } else {
+                scaleAnimate(
+                    circularStatState = circularStatState,
+                    canvasSize = canvasSize
+                )
+            },
+            maxIndicatorValue = maxIndicatorValue,
+            animationType = animationType
         )
 
     }
@@ -178,24 +184,16 @@ fun EmbeddedElements(
     progressTextFontSize: TextUnit,
     progressTextColor: Color,
     canvasSize: Dp,
-    maxIndicatorValue: Int
+    maxIndicatorValue: Int,
+    animationType: AnimateCompletion
 ) {
 
     Box(
         modifier = Modifier.size(canvasSize),
         contentAlignment = Alignment.Center
     ) {
-        var visibility by remember {
-            mutableStateOf(true)
-        }
 
-        visibility = progressText != maxIndicatorValue
-
-        AnimatedVisibility(
-            visible = visibility,
-            enter = scaleIn() + fadeIn(),
-            exit = scaleOut() + fadeOut()
-        ) {
+        if(animationType == AnimateCompletion.BOUNCE){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -212,21 +210,48 @@ fun EmbeddedElements(
                     color = labelTextColor
                 )
             }
+        }else{
+            var visibility by remember {
+                mutableStateOf(true)
+            }
+
+            visibility = progressText != maxIndicatorValue
+
+            AnimatedVisibility(
+                visible = visibility,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = progressText.toString(),
+                        fontSize = progressTextFontSize,
+                        color = progressTextColor,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = labelText,
+                        fontSize = labelTextFontSize,
+                        color = labelTextColor
+                    )
+                }
+            }
+
+            AnimatedVisibility(
+                visible = !visibility,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Check,
+                    contentDescription = "Checked",
+                    modifier = Modifier.size(canvasSize.div(1.30f))
+                )
+            }
         }
-
-        AnimatedVisibility(
-            visible = !visibility,
-            enter = scaleIn() + fadeIn(),
-            exit = scaleOut() + fadeOut()
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Check,
-                contentDescription = "Checked",
-                modifier = Modifier.size(canvasSize.div(1.30f))
-            )
-        }
-
-
 
     }
 
