@@ -2,36 +2,24 @@ package com.jyotimoykashyap.circularstatswidget
 
 import android.os.Handler
 import android.os.Looper
-import android.view.animation.OvershootInterpolator
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
-
-
 
 @Composable
 fun CircularStats(
@@ -49,7 +37,7 @@ fun CircularStats(
     progressTextFontSize: TextUnit = MaterialTheme.typography.h3.fontSize,
     progressTextColor: Color = MaterialTheme.colors.onSurface,
     animationType: AnimateCompletion = AnimateCompletion.BOUNCE
-){
+) {
 
 
     // this is the allowed indicator value
@@ -59,15 +47,15 @@ fun CircularStats(
 
 
     // if indicator value is more than put max
-    allowedIndicatorValue = if(indicatorValue <= maxIndicatorValue){
+    allowedIndicatorValue = if (indicatorValue <= maxIndicatorValue) {
         indicatorValue
-    }else maxIndicatorValue
+    } else maxIndicatorValue
 
     var animateIndicatorValue by remember {
         mutableStateOf(0f)
     }
-    
-    LaunchedEffect(key1 = allowedIndicatorValue){
+
+    LaunchedEffect(key1 = allowedIndicatorValue) {
         animateIndicatorValue = allowedIndicatorValue.toFloat()
     }
 
@@ -91,11 +79,11 @@ fun CircularStats(
 
     // calculate sweep angle
     val sweepAngle by animateFloatAsState(
-        targetValue = (3.6*percentage).toFloat(),
+        targetValue = (3.6 * percentage).toFloat(),
         animationSpec = tween(1000),
         finishedListener = {
             // start another animation here
-            if(indicatorValue == maxIndicatorValue){
+            if (indicatorValue == maxIndicatorValue) {
 
                 /**
                  * When indicator value is equal to max value
@@ -123,7 +111,7 @@ fun CircularStats(
     // animate progress text color
     val animateProgressTextColor by animateColorAsState(
         targetValue =
-        if(allowedIndicatorValue == 0)
+        if (allowedIndicatorValue == 0)
             MaterialTheme.colors.onSecondary.copy(0.3f)
         else
             progressTextColor,
@@ -160,7 +148,7 @@ fun CircularStats(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
+
         EmbeddedElements(
             labelTextFontSize = labelTextFontSize,
             labelTextColor = labelTextColor,
@@ -180,6 +168,7 @@ fun CircularStats(
 }
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun EmbeddedElements(
     labelText: String = "Progress",
@@ -190,16 +179,26 @@ fun EmbeddedElements(
     progressTextColor: Color,
     canvasSize: Dp,
     maxIndicatorValue: Int
-){
+) {
 
     Box(
         modifier = Modifier.size(canvasSize),
         contentAlignment = Alignment.Center
-    ){
-        if(progressText != maxIndicatorValue){
+    ) {
+        var visibility by remember {
+            mutableStateOf(true)
+        }
+
+        visibility = progressText != maxIndicatorValue
+
+        AnimatedVisibility(
+            visible = visibility,
+            enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut()
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(
                     text = progressText.toString(),
                     fontSize = progressTextFontSize,
@@ -213,26 +212,30 @@ fun EmbeddedElements(
                     color = labelTextColor
                 )
             }
-        }else{
+        }
+
+        AnimatedVisibility(
+            visible = !visibility,
+            enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut()
+        ) {
             Icon(
-                imageVector = Icons.Default.CheckCircle,
+                imageVector = Icons.Rounded.Check,
                 contentDescription = "Checked",
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.size(canvasSize.div(1.30f))
             )
         }
 
+
+
     }
-
-
 
 
 }
 
 
-
-
 @Composable
 @Preview(showBackground = true)
-fun CircularStatsPreview(){
+fun CircularStatsPreview() {
     CircularStats()
 }
